@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Turnos - Por Áreas</title>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -43,8 +44,8 @@
             font-weight: 600; font-size: 0.9em; transition: all 0.3s;
             display: flex; align-items: center; gap: 8px;
         }
-        .btn-image { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
-        .btn-image:hover { background: linear-gradient(135deg, #7c3aed, #6d28d9); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3); }
+        .btn-pdf { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; }
+        .btn-pdf:hover { background: linear-gradient(135deg, #b91c1c, #991b1b); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3); }
         .btn-clear { background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; }
         .btn-clear:hover { background: linear-gradient(135deg, #b91c1c, #991b1b); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3); }
         .btn-export { background: linear-gradient(135deg, #059669, #047857); color: white; }
@@ -75,34 +76,6 @@
         button.delete-btn { background-color: var(--danger); padding: 8px 12px; font-size: 0.85em; }
         button.edit-btn { background-color: var(--warning); padding: 8px 12px; font-size: 0.85em; margin-right: 5px; }
 
-        /* BUSCADOR */
-        .search-box {
-            position: relative;
-            flex: 1;
-            max-width: 400px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 10px 15px 10px 40px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95em;
-            transition: all 0.2s;
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-            font-size: 1.1em;
-        }
-
         .area-filters { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
         .area-filter-btn { padding: 10px 20px; border: 2px solid var(--border); background: white; color: #374151; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
         .area-filter-btn:hover { opacity: 0.85; transform: translateY(-1px); }
@@ -130,7 +103,7 @@
         th { background-color: #f9fafb; font-weight: 700; color: #4b5563; position: sticky; top: 0; z-index: 10; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; }
         th.dia-header { min-width: 150px; font-size: 0.85em; padding: 12px 6px; }
 
-        /* VISTA SEMANAL COMPLETA */
+        /* VISTA SEMANAL COMPLETA - ESTILOS MEJORADOS PARA PDF */
         .vista-semanal-container {
             background: white;
             border-radius: 10px;
@@ -254,7 +227,6 @@
         .seccion-estudio { background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 2px solid var(--estudio); border-radius: 8px; padding: 15px; margin: 10px 0; }
         .seccion-estudio h4 { margin: 0 0 15px 0; color: var(--estudio); font-size: 1em; display: flex; align-items: center; gap: 8px; }
         
-        /* MÚLTIPLES HORARIOS POR DÍA - MEJORADO */
         .horarios-dia-container {
             display: flex;
             flex-direction: column;
@@ -387,11 +359,10 @@
             input[type="text"].hora-input { width: 70px; padding: 5px 6px; font-size: 0.85em; }
             .plantilla-dropdown { position: fixed; left: 10px !important; right: 10px; min-width: auto; }
             .plantillas-grid { grid-template-columns: 1fr; }
-            .search-box { max-width: 100%; }
         }
 
         @media print {
-            .toolbar, .tabs, .area-filters, .break-notice, button, .plantilla-dropdown, .search-box { display: none !important; }
+            .toolbar, .tabs, .area-filters, .break-notice, button, .plantilla-dropdown { display: none !important; }
             .area-content { display: block !important; }
             .area-section { page-break-inside: avoid; }
         }
@@ -404,10 +375,9 @@
     <h1>🕒 Gestor de Turnos por Áreas</h1>
     
     <div class="toolbar no-export">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="buscadorColaborador" placeholder="Buscar colaborador..." oninput="buscarColaborador()">
-        </div>
+        <button class="btn-pdf" onclick="exportarPDF()">
+            <span>📄</span> Descargar PDF (Vista Semanal)
+        </button>
         <button class="btn-export" onclick="exportarDatos()">
             <span>📤</span> Exportar Datos
         </button>
@@ -415,9 +385,6 @@
             <span>📥</span> Importar Datos
         </button>
         <input type="file" id="inputImport" accept=".json" onchange="importarDatos(event)">
-        <button class="btn-image" onclick="exportarAImagen()">
-            <span>📷</span> Guardar como Imagen
-        </button>
         <button class="btn-clear" onclick="limpiarTodoHorario()">
             <span>🗑️</span> Limpiar Todo el Horario
         </button>
@@ -573,7 +540,7 @@
 
     <!-- PESTAÑA 3: VISTA SEMANAL COMPLETA -->
     <div id="tab-vista-semanal" class="tab-content">
-        <div class="vista-semanal-container">
+        <div class="vista-semanal-container" id="vistaSemanalParaPDF">
             <h2 style="margin: 0 0 15px 0; color: #1f2937;">📊 Vista Semanal Completa</h2>
             <p style="color: #6b7280; margin-bottom: 20px;">Visualización de todos los colaboradores organizados por área y día.</p>
             
@@ -968,27 +935,6 @@
         renderizarColaboradores();
     }
 
-    // ==================== BUSCADOR ====================
-    function buscarColaborador() {
-        const texto = document.getElementById('buscadorColaborador').value.toLowerCase().trim();
-        const filas = document.querySelectorAll('#tablaColaboradores tr');
-        
-        filas.forEach((fila, index) => {
-            // Saltar el header
-            if (index === 0) return;
-            
-            const nombre = fila.querySelector('.colaborador-nombre');
-            if (nombre) {
-                const textoNombre = nombre.textContent.toLowerCase();
-                if (textoNombre.includes(texto) || texto === '') {
-                    fila.style.display = '';
-                } else {
-                    fila.style.display = 'none';
-                }
-            }
-        });
-    }
-
     function renderizarColaboradores() {
         const tbody = document.getElementById('tablaColaboradores');
         tbody.innerHTML = '';
@@ -1069,6 +1015,95 @@
         }
     }
 
+    // ==================== EXPORTAR A PDF - VISTA SEMANAL ====================
+    
+    async function exportarPDF() {
+        if (colaboradores.length === 0) {
+            alert("⚠️ No hay datos para exportar");
+            return;
+        }
+
+        const btn = document.querySelector('.btn-pdf');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "⏳ Generando PDF...";
+        btn.disabled = true;
+
+        try {
+            // Cambiar a la pestaña Vista Semanal
+            cambiarTab('vista-semanal');
+            
+            // Esperar a que se renderice
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Renderizar la vista semanal
+            renderizarVistaSemanal();
+            
+            // Esperar otro poco para asegurar que todo esté renderizado
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const element = document.getElementById('vistaSemanalParaPDF');
+            
+            if (!element) {
+                throw new Error('No se encontró el elemento de Vista Semanal');
+            }
+
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false,
+                width: element.scrollWidth,
+                height: element.scrollHeight,
+                windowWidth: element.scrollWidth,
+                windowHeight: element.scrollHeight
+            });
+
+            // Verificar que el canvas se generó correctamente
+            if (!canvas || canvas.width === 0 || canvas.height === 0) {
+                throw new Error('El canvas se generó vacío');
+            }
+
+            const imgData = canvas.toDataURL('image/png', 1.0);
+            
+            // Crear PDF en orientación horizontal
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('l', 'mm', 'a4');
+            
+            const imgWidth = 280;
+            const pageHeight = 210;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 10;
+
+            pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            // Si hay más páginas
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            const fecha = new Date().toISOString().split('T')[0];
+            pdf.save(`vista-semanal-${fecha}.pdf`);
+            
+            btn.innerHTML = "✅ ¡PDF Generado!";
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+            
+            alert("✅ PDF de Vista Semanal generado y descargado correctamente");
+        } catch (error) {
+            console.error('Error al generar PDF:', error);
+            alert("❌ Error al generar el PDF:\n\n" + error.message + "\n\nPor favor, asegúrate de tener colaboradores con turnos asignados.");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
     // ==================== EXPORTAR E IMPORTAR DATOS ====================
     
     function exportarDatos() {
@@ -1137,40 +1172,6 @@
         };
         reader.readAsText(file);
         event.target.value = '';
-    }
-
-    function exportarAImagen() {
-        if (colaboradores.length === 0) {
-            alert("⚠️ No hay datos para exportar");
-            return;
-        }
-        document.querySelectorAll('.area-content.collapsed').forEach(content => content.classList.remove('collapsed'));
-        document.querySelectorAll('.toggle-icon.collapsed').forEach(icon => icon.classList.remove('collapsed'));
-        const element = document.querySelector('#tab-horarios');
-        const fecha = new Date().toISOString().split('T')[0];
-        const options = { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false, width: element.scrollWidth, height: element.scrollHeight };
-        const btn = document.querySelector('.btn-image');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = "⏳ Generando...";
-        btn.disabled = true;
-        html2canvas(element, options).then(canvas => {
-            canvas.toBlob(blob => {
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.download = `horario-semanal-${fecha}.png`;
-                link.href = url;
-                link.click();
-                URL.revokeObjectURL(url);
-                btn.innerHTML = "✅ ¡Exportado!";
-                setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 2000);
-                alert("✅ Imagen guardada correctamente");
-            }, 'image/png');
-        }).catch(err => {
-            console.error('Error:', err);
-            alert("❌ Error al generar la imagen");
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        });
     }
 
     // ==================== VISTA SEMANAL COMPLETA ====================
