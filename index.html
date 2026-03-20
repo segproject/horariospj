@@ -15,6 +15,7 @@
             --border: #d1d5db;
             --descanso: #10b981;
             --vacaciones: #8b5cf6;
+            --feriado: #f59e0b;
             --lider: #dc2626;
             --servicio: #2563eb;
             --produccion: #16a34a;
@@ -74,6 +75,34 @@
         button.delete-btn { background-color: var(--danger); padding: 8px 12px; font-size: 0.85em; }
         button.edit-btn { background-color: var(--warning); padding: 8px 12px; font-size: 0.85em; margin-right: 5px; }
 
+        /* BUSCADOR */
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1.1em;
+        }
+
         .area-filters { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
         .area-filter-btn { padding: 10px 20px; border: 2px solid var(--border); background: white; color: #374151; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
         .area-filter-btn:hover { opacity: 0.85; transform: translateY(-1px); }
@@ -96,56 +125,124 @@
         .toggle-icon.collapsed { transform: rotate(-90deg); }
 
         .table-container { overflow-x: auto; max-height: calc(100vh - 350px); overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
-        th, td { padding: 10px 6px; text-align: center; border-bottom: 1px solid #e5e7eb; vertical-align: middle; }
-        th { background-color: #f9fafb; font-weight: 700; color: #4b5563; position: sticky; top: 0; z-index: 10; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.5px; }
-        th.dia-header { min-width: 130px; font-size: 0.75em; padding: 10px 4px; }
+        table { width: 100%; border-collapse: collapse; font-size: 1em; }
+        th, td { padding: 12px 8px; text-align: center; border-bottom: 1px solid #e5e7eb; vertical-align: middle; }
+        th { background-color: #f9fafb; font-weight: 700; color: #4b5563; position: sticky; top: 0; z-index: 10; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; }
+        th.dia-header { min-width: 150px; font-size: 0.85em; padding: 12px 6px; }
+
+        /* VISTA SEMANAL COMPLETA */
+        .vista-semanal-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        .tabla-semanal {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+            min-width: 1200px;
+        }
+        .tabla-semanal th {
+            background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            color: white;
+            padding: 12px 8px;
+            font-weight: 700;
+            border: 1px solid #1e40af;
+            min-width: 100px;
+        }
+        .tabla-semanal td {
+            padding: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+            vertical-align: top;
+        }
+        .tabla-semanal .col-nombre {
+            background: #f9fafb;
+            font-weight: 600;
+            min-width: 150px;
+            text-align: left;
+            padding: 10px;
+        }
+        .tabla-semanal .col-area {
+            background: #f9fafb;
+            min-width: 100px;
+        }
+        .tabla-semanal .turno-cell {
+            min-height: 60px;
+            font-size: 0.9em;
+        }
+        .turno-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .turno-trabajo { background: #dbeafe; color: #1e40af; }
+        .turno-descanso { background: #d1fae5; color: #065f46; }
+        .turno-vacaciones { background: #f3e8ff; color: #6b21a8; }
+        .turno-feriado { background: #fef3c7; color: #92400e; }
+        .sin-turno {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 0.85em;
+        }
+        .separador-area {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            font-weight: 700;
+            font-size: 1em;
+        }
 
         .time-inputs { display: flex; flex-direction: column; gap: 4px; align-items: center; width: 100%; }
-        .time-row { display: flex; align-items: center; gap: 4px; font-size: 0.75em; width: 100%; justify-content: center; }
-        .time-row label { margin: 0; font-weight: 600; color: #9ca3af; font-size: 0.7em; white-space: nowrap; }
+        .time-row { display: flex; align-items: center; gap: 4px; font-size: 0.85em; width: 100%; justify-content: center; }
+        .time-row label { margin: 0; font-weight: 600; color: #9ca3af; font-size: 0.75em; white-space: nowrap; }
         
         input[type="text"].hora-input {
-            padding: 4px 6px; border: 1px solid #e5e7eb; border-radius: 4px;
-            width: 65px; font-size: 0.8em; text-align: center; font-weight: 600;
+            padding: 6px 8px; border: 1px solid #e5e7eb; border-radius: 4px;
+            width: 75px; font-size: 0.9em; text-align: center; font-weight: 600;
             transition: all 0.2s; background: #f9fafb; color: #333;
         }
         input[type="text"].hora-input:focus { outline: none; border-color: var(--primary); background-color: white; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1); }
         input[type="text"].hora-input:disabled { background-color: #f3f4f6; color: #d1d5db; border-color: #e5e7eb; cursor: not-allowed; }
 
-        .dia-selector { width: 100%; padding: 4px 6px; border-radius: 4px; border: 2px solid var(--border); font-size: 0.7em; font-weight: 700; cursor: pointer; margin-bottom: 4px; transition: all 0.2s; }
+        .dia-selector { width: 100%; padding: 6px 8px; border-radius: 4px; border: 2px solid var(--border); font-size: 0.8em; font-weight: 700; cursor: pointer; margin-bottom: 4px; transition: all 0.2s; }
         .dia-selector.trabajo { border-color: var(--primary); background-color: #eff6ff; color: var(--primary); }
         .dia-selector.descanso { border-color: var(--descanso); background-color: #ecfdf5; color: var(--descanso); }
         .dia-selector.vacaciones { border-color: var(--vacaciones); background-color: #f5f3ff; color: var(--vacaciones); }
+        .dia-selector.feriado { border-color: var(--feriado); background-color: #fffbeb; color: var(--feriado); }
 
-        .total-cell { font-weight: 700; font-size: 0.9em; min-width: 110px; background-color: #f9fafb; padding: 10px 6px; border-radius: 8px; }
+        .total-cell { font-weight: 700; font-size: 1em; min-width: 110px; background-color: #f9fafb; padding: 10px 6px; border-radius: 8px; }
         .status-ok { color: var(--success); }
         .status-danger { color: var(--danger); }
         .status-warning { color: var(--warning); }
-        .meta-info { font-size: 0.75em; display: block; margin-top: 3px; font-weight: 500; }
-        .break-info { font-size: 0.7em; color: #dc2626; display: block; margin-top: 2px; font-weight: 600; }
+        .meta-info { font-size: 0.85em; display: block; margin-top: 3px; font-weight: 500; }
+        .break-info { font-size: 0.8em; color: #dc2626; display: block; margin-top: 2px; font-weight: 600; }
 
-        .badge { padding: 3px 8px; border-radius: 8px; font-size: 0.75em; color: white; font-weight: 700; }
+        .badge { padding: 4px 10px; border-radius: 8px; font-size: 0.85em; color: white; font-weight: 700; }
         .badge-full { background-color: var(--primary); }
         .badge-part { background-color: #9333ea; }
 
-        .area-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: 700; display: inline-block; }
+        .area-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: 700; display: inline-block; }
         .area-badge.lider { background-color: #fecaca; color: #991b1b; }
         .area-badge.servicio { background-color: #bfdbfe; color: #1e40af; }
         .area-badge.produccion { background-color: #bbf7d0; color: #166534; }
 
-        .badge-estudio { position: absolute; top: 4px; right: 4px; background: var(--estudio); color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.65em; cursor: help; z-index: 5; animation: pulse 2s infinite; }
+        .badge-estudio { position: absolute; top: 4px; right: 4px; background: var(--estudio); color: white; padding: 3px 6px; border-radius: 4px; font-size: 0.75em; cursor: help; z-index: 5; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
-        .stats-box { background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 15px 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); display: flex; gap: 25px; flex-wrap: wrap; font-size: 0.9em; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .stats-box { background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 15px 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); display: flex; gap: 25px; flex-wrap: wrap; font-size: 0.95em; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .stat-item { display: flex; align-items: center; gap: 8px; }
         .stat-icon { font-size: 1.3em; }
-        .colaborador-nombre { font-weight: 700; text-align: left; white-space: nowrap; color: #1f2937; font-size: 0.9em; }
+        .colaborador-nombre { font-weight: 700; text-align: left; white-space: nowrap; color: #1f2937; font-size: 0.95em; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(3px); }
         .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); min-width: 400px; max-width: 500px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+        .modal { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); min-width: 400px; max-width: 700px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .modal h3 { margin: 0 0 20px 0; color: #1f2937; font-size: 1.3em; font-weight: 700; display: flex; align-items: center; gap: 10px; }
         .modal .form-row { margin-bottom: 20px; }
@@ -156,23 +253,77 @@
 
         .seccion-estudio { background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 2px solid var(--estudio); border-radius: 8px; padding: 15px; margin: 10px 0; }
         .seccion-estudio h4 { margin: 0 0 15px 0; color: var(--estudio); font-size: 1em; display: flex; align-items: center; gap: 8px; }
+        
+        /* MÚLTIPLES HORARIOS POR DÍA - MEJORADO */
+        .horarios-dia-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .horario-individual {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .horario-individual .dia-nombre {
+            font-weight: 700;
+            min-width: 120px;
+            color: #4b5563;
+            font-size: 0.95em;
+        }
+        .horario-individual .horas-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        .horario-individual .horario-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: #f9fafb;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+        .horario-individual .btn-agregar-horario {
+            background: var(--success);
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+        .horario-individual .btn-eliminar-horario {
+            background: var(--danger);
+            color: white;
+            padding: 6px 10px;
+            font-size: 0.85em;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
         .grid-estudio-vertical { display: flex; flex-direction: column; gap: 10px; }
         .dia-estudio-vertical { background: white; padding: 12px; border-radius: 8px; border: 2px solid var(--border); display: flex; align-items: center; gap: 15px; transition: all 0.3s; }
         .dia-estudio-vertical:hover { border-color: var(--estudio); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15); }
         .dia-estudio-vertical.activo { border-color: var(--estudio); background: linear-gradient(135deg, #faf5ff, #f3e8ff); }
-        .dia-estudio-vertical .dia-nombre { font-weight: 700; min-width: 80px; color: #4b5563; font-size: 0.9em; }
         .dia-estudio-vertical .checkbox-wrapper { display: flex; align-items: center; gap: 6px; min-width: 100px; }
-        .dia-estudio-vertical .checkbox-wrapper label { margin: 0; font-size: 0.85em; cursor: pointer; font-weight: 600; }
-        .dia-estudio-vertical .horas-wrapper { display: flex; gap: 10px; flex: 1; align-items: center; }
-        .dia-estudio-vertical .hora-input { flex: 1; padding: 8px; font-size: 0.9em; max-width: 100px; }
-        .dia-estudio-vertical .hora-input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+        .dia-estudio-vertical .checkbox-wrapper label { margin: 0; font-size: 0.9em; cursor: pointer; font-weight: 600; }
         .dia-estudio-vertical .separador { color: #9ca3af; font-weight: 700; }
 
-        td.con-estudio { background: linear-gradient(135deg, #faf5ff, #f3e8ff); border-left: 3px solid var(--estudio); position: relative; }
+        td.con-estudio { background: linear-gradient(135deg, #faf5ff, #f3e8ff); border-left: 4px solid var(--estudio); position: relative; }
         .input-conflicto { border-color: var(--danger) !important; background-color: #fef2f2 !important; animation: shake 0.3s; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
 
-        .break-notice { background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid #d97706; padding: 12px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 0.85em; color: #92400e; display: flex; align-items: center; gap: 10px; }
+        .break-notice { background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid #d97706; padding: 12px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 0.9em; color: #92400e; display: flex; align-items: center; gap: 10px; }
         .break-notice strong { font-weight: 700; }
 
         .plantilla-dropdown {
@@ -182,14 +333,14 @@
         }
         .plantilla-dropdown.active { display: block; animation: slideDown 0.2s ease; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .plantilla-dropdown-item { padding: 10px 15px; cursor: pointer; transition: background 0.2s; border-bottom: 1px solid #f3f4f6; font-size: 0.85em; }
+        .plantilla-dropdown-item { padding: 10px 15px; cursor: pointer; transition: background 0.2s; border-bottom: 1px solid #f3f4f6; font-size: 0.9em; }
         .plantilla-dropdown-item:hover { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
         .plantilla-dropdown-item:last-child { border-bottom: none; }
-        .plantilla-dropdown-item .horario { font-size: 0.75em; color: #6b7280; margin-top: 2px; }
+        .plantilla-dropdown-item .horario { font-size: 0.8em; color: #6b7280; margin-top: 2px; }
 
         .btn-plantilla-rapida {
             background: linear-gradient(135deg, #059669, #047857); color: white;
-            border: none; border-radius: 4px; padding: 4px 8px; font-size: 0.7em;
+            border: none; border-radius: 4px; padding: 6px 10px; font-size: 0.8em;
             cursor: pointer; margin-bottom: 4px; transition: all 0.2s;
             display: flex; align-items: center; gap: 4px; width: 100%; justify-content: center;
         }
@@ -201,7 +352,7 @@
         .plantilla-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
         .plantilla-card-titulo { font-size: 1.1em; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 8px; }
         .plantilla-card-acciones { display: flex; gap: 8px; }
-        .btn-accion-plantilla { padding: 6px 12px; font-size: 0.8em; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s; }
+        .btn-accion-plantilla { padding: 6px 12px; font-size: 0.85em; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s; }
         .btn-editar { background: var(--warning); color: white; }
         .btn-eliminar { background: var(--danger); color: white; }
         .plantilla-card-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -231,17 +382,16 @@
             .stats-box { flex-direction: column; gap: 10px; }
             .toolbar { flex-direction: column; }
             .toolbar button { width: 100%; justify-content: center; }
-            .dia-estudio-vertical { flex-direction: column; align-items: flex-start; }
-            .dia-estudio-vertical .horas-wrapper { width: 100%; flex-wrap: wrap; }
-            table { font-size: 0.75em; }
-            th.dia-header { min-width: 100px; font-size: 0.7em; }
-            input[type="text"].hora-input { width: 55px; padding: 3px 4px; font-size: 0.75em; }
+            table { font-size: 0.9em; }
+            th.dia-header { min-width: 120px; font-size: 0.8em; }
+            input[type="text"].hora-input { width: 70px; padding: 5px 6px; font-size: 0.85em; }
             .plantilla-dropdown { position: fixed; left: 10px !important; right: 10px; min-width: auto; }
             .plantillas-grid { grid-template-columns: 1fr; }
+            .search-box { max-width: 100%; }
         }
 
         @media print {
-            .toolbar, .tabs, .area-filters, .break-notice, button, .plantilla-dropdown { display: none !important; }
+            .toolbar, .tabs, .area-filters, .break-notice, button, .plantilla-dropdown, .search-box { display: none !important; }
             .area-content { display: block !important; }
             .area-section { page-break-inside: avoid; }
         }
@@ -254,6 +404,10 @@
     <h1>🕒 Gestor de Turnos por Áreas</h1>
     
     <div class="toolbar no-export">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="buscadorColaborador" placeholder="Buscar colaborador..." oninput="buscarColaborador()">
+        </div>
         <button class="btn-export" onclick="exportarDatos()">
             <span>📤</span> Exportar Datos
         </button>
@@ -262,16 +416,17 @@
         </button>
         <input type="file" id="inputImport" accept=".json" onchange="importarDatos(event)">
         <button class="btn-image" onclick="exportarAImagen()">
-            <span>📷</span> Guardar Imagen
+            <span>📷</span> Guardar como Imagen
         </button>
         <button class="btn-clear" onclick="limpiarTodoHorario()">
-            <span>🗑️</span> Limpiar Horario
+            <span>🗑️</span> Limpiar Todo el Horario
         </button>
     </div>
     
     <div class="tabs no-export">
         <button class="tab-btn active" onclick="cambiarTab('colaboradores')">👥 Colaboradores</button>
-        <button class="tab-btn" onclick="cambiarTab('horarios')">📅 Horarios</button>
+        <button class="tab-btn" onclick="cambiarTab('horarios')">📅 Horarios por Área</button>
+        <button class="tab-btn" onclick="cambiarTab('vista-semanal')">📊 Vista Semanal</button>
         <button class="tab-btn" onclick="cambiarTab('plantillas')">📋 Plantillas</button>
     </div>
 
@@ -324,20 +479,25 @@
         </div>
     </div>
 
-    <!-- PESTAÑA 2: HORARIOS -->
+    <!-- PESTAÑA 2: HORARIOS POR ÁREA -->
     <div id="tab-horarios" class="tab-content">
+        <div class="break-notice no-export">
+            <span>ℹ️</span>
+            <span><strong>Info:</strong> Full Time: break de 45min/día trabajado. 🎓 = Estudio. 📋 Click en "⚡" para aplicar plantilla rápida por día.</span>
+        </div>
 
         <div class="stats-box no-export">
             <div class="stat-item"><span class="stat-icon">💡</span><span>Formato: <strong>HH:MM</strong></span></div>
             <div class="stat-item"><span class="stat-icon">🏖️</span><span>Descanso = Día libre</span></div>
             <div class="stat-item"><span class="stat-icon">✈️</span><span>Vacaciones = No cuenta horas</span></div>
+            <div class="stat-item"><span class="stat-icon">🎉</span><span>Feriado = No cuenta horas</span></div>
             <div class="stat-item"><span class="stat-icon">🎓</span><span>Estudio = Bloque no disponible</span></div>
         </div>
 
         <!-- ÁREAS -->
         <div class="area-section">
             <div class="area-header lider" onclick="toggleArea('area-lider-content', this)">
-                <span>👔 LIDER</span>
+                <span>👔 ÁREA LIDER</span>
                 <span><span class="count" id="count-lider">0</span> colaboradores <span class="toggle-icon">▼</span></span>
             </div>
             <div id="area-lider-content" class="area-content">
@@ -362,7 +522,7 @@
 
         <div class="area-section">
             <div class="area-header servicio" onclick="toggleArea('area-servicio-content', this)">
-                <span>🎯 SERVICIO</span>
+                <span>🎯 ÁREA SERVICIO</span>
                 <span><span class="count" id="count-servicio">0</span> colaboradores <span class="toggle-icon">▼</span></span>
             </div>
             <div id="area-servicio-content" class="area-content">
@@ -387,7 +547,7 @@
 
         <div class="area-section">
             <div class="area-header produccion" onclick="toggleArea('area-produccion-content', this)">
-                <span>🏭 PRODUCCION</span>
+                <span>🏭 ÁREA PRODUCCION</span>
                 <span><span class="count" id="count-produccion">0</span> colaboradores <span class="toggle-icon">▼</span></span>
             </div>
             <div id="area-produccion-content" class="area-content">
@@ -411,7 +571,34 @@
         </div>
     </div>
 
-    <!-- PESTAÑA 3: PLANTILLAS -->
+    <!-- PESTAÑA 3: VISTA SEMANAL COMPLETA -->
+    <div id="tab-vista-semanal" class="tab-content">
+        <div class="vista-semanal-container">
+            <h2 style="margin: 0 0 15px 0; color: #1f2937;">📊 Vista Semanal Completa</h2>
+            <p style="color: #6b7280; margin-bottom: 20px;">Visualización de todos los colaboradores organizados por área y día.</p>
+            
+            <table class="tabla-semanal" id="tablaVistaSemanal">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Área</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                        <th>Sábado</th>
+                        <th>Domingo</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyVistaSemanal">
+                    <!-- Se llena dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 4: PLANTILLAS -->
     <div id="tab-plantillas" class="tab-content">
         <div class="panel">
             <h2 style="margin: 0 0 10px 0; color: #1f2937;">📋 Gestión de Plantillas Diarias</h2>
@@ -463,8 +650,8 @@
         </div>
 
         <div id="seccionEstudioModal" class="seccion-estudio" style="display: none;">
-            <h4>📚 Horario de clases (bloques no disponibles para trabajo)</h4>
-            <div class="grid-estudio-vertical" id="gridEstudioModal"></div>
+            <h4>📚 Horarios de clases (puedes agregar múltiples horarios por día)</h4>
+            <div id="gridEstudioModal"></div>
         </div>
 
         <div class="modal-buttons">
@@ -493,6 +680,7 @@
                     <option value="trabajo">🕐 Trabajo</option>
                     <option value="descanso">🏖️ Descanso</option>
                     <option value="vacaciones">✈️ Vacaciones</option>
+                    <option value="feriado">🎉 Feriado</option>
                 </select>
             </div>
         </div>
@@ -565,6 +753,7 @@
         event.target.classList.add('active');
         if (tabName === 'horarios') renderizarHorarios();
         if (tabName === 'plantillas') renderizarPlantillas();
+        if (tabName === 'vista-semanal') renderizarVistaSemanal();
     }
 
     function toMinutes(hora) {
@@ -585,108 +774,120 @@
         return Math.max(0, (fecha2 - fecha1) / (1000 * 60 * 60));
     }
 
-    function hayConflicto(inicioTrab, finTrab, inicioEst, finEst) {
-        const it = toMinutes(inicioTrab), ft = toMinutes(finTrab);
-        const ie = toMinutes(inicioEst), fe = toMinutes(finEst);
-        if (it === null || ft === null || ie === null || fe === null) return false;
-        if (ft < it) ft += 24 * 60;
-        if (fe < ie) fe += 24 * 60;
-        return it < fe && ft > ie;
+    function hayConflictoConEstudio(turnoInicio, turnoFin, diaIndex) {
+        const colab = colaboradores.find(c => c.id === colaboradorEditandoId);
+        if (!colab || !colab.horarioEstudio || !colab.horarioEstudio[diaIndex]) return false;
+        
+        const horariosEstudio = colab.horarioEstudio[diaIndex];
+        if (!horariosEstudio || horariosEstudio.length === 0) return false;
+        
+        const turnoInicioMin = toMinutes(turnoInicio);
+        const turnoFinMin = toMinutes(turnoFin);
+        
+        for (let horario of horariosEstudio) {
+            const estudioInicioMin = toMinutes(horario.inicio);
+            const estudioFinMin = toMinutes(horario.fin);
+            
+            if (turnoInicioMin < estudioFinMin && turnoFinMin > estudioInicioMin) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function inicializarGridEstudio() {
         const grid = document.getElementById('gridEstudioModal');
-        grid.innerHTML = '';
+        grid.innerHTML = '<div class="horarios-dia-container" id="contenedorHorariosEstudio"></div>';
+    }
+
+    function renderizarHorariosEstudioModal() {
+        const colab = colaboradores.find(c => c.id === colaboradorEditandoId);
+        const contenedor = document.getElementById('contenedorHorariosEstudio');
+        contenedor.innerHTML = '';
+        
+        if (!colab || !colab.horarioEstudio) return;
+        
         DIAS.forEach((dia, index) => {
-            grid.innerHTML += `
-                <div class="dia-estudio-vertical" id="dia-estudio-${index}">
-                    <div class="dia-nombre">${dia}</div>
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="estudio-activo-${index}" class="estudio-activo" data-dia="${index}" onchange="toggleDiaEstudio(${index})">
-                        <label for="estudio-activo-${index}">Activo</label>
-                    </div>
-                    <div class="horas-wrapper">
-                        <input type="text" class="hora-input estudio-inicio" id="estudio-inicio-${index}" data-dia="${index}" disabled>
-                        <span class="separador">a</span>
-                        <input type="text" class="hora-input estudio-fin" id="estudio-fin-${index}" data-dia="${index}" disabled>
-                    </div>
-                </div>
-            `;
+            const horariosDia = colab.horarioEstudio[index] || [];
+            
+            const diaDiv = document.createElement('div');
+            diaDiv.className = 'horario-individual';
+            
+            let html = `<div class="dia-nombre">${dia}</div>`;
+            html += `<div class="horas-wrapper">`;
+            
+            if (horariosDia.length === 0) {
+                html += `<span style="color: #9ca3af; font-style: italic;">Sin horarios</span>`;
+            } else {
+                horariosDia.forEach((horario, hIndex) => {
+                    html += `
+                        <div class="horario-item">
+                            <input type="text" class="hora-input" placeholder="Inicio" 
+                                value="${horario.inicio || ''}" 
+                                onchange="actualizarHorarioEstudio(${index}, ${hIndex}, 'inicio', this.value)"
+                                style="width: 70px;">
+                            <span>-</span>
+                            <input type="text" class="hora-input" placeholder="Fin" 
+                                value="${horario.fin || ''}" 
+                                onchange="actualizarHorarioEstudio(${index}, ${hIndex}, 'fin', this.value)"
+                                style="width: 70px;">
+                            <button type="button" class="btn-eliminar-horario" onclick="eliminarHorarioEstudio(${index}, ${hIndex})">🗑️</button>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += `</div>`;
+            html += `<button type="button" class="btn-agregar-horario" onclick="agregarHorarioEstudio(${index})">➕ Agregar Horario</button>`;
+            
+            diaDiv.innerHTML = html;
+            contenedor.appendChild(diaDiv);
         });
     }
 
-    function toggleDiaEstudio(index) {
-        const checkbox = document.getElementById(`estudio-activo-${index}`);
-        const inicio = document.getElementById(`estudio-inicio-${index}`);
-        const fin = document.getElementById(`estudio-fin-${index}`);
-        const diaDiv = document.getElementById(`dia-estudio-${index}`);
-        inicio.disabled = !checkbox.checked;
-        fin.disabled = !checkbox.checked;
-        if (!checkbox.checked) {
-            inicio.value = '';
-            fin.value = '';
-            diaDiv.classList.remove('activo');
-        } else {
-            diaDiv.classList.add('activo');
-            inicio.focus();
+    function agregarHorarioEstudio(diaIndex) {
+        const colab = colaboradores.find(c => c.id === colaboradorEditandoId);
+        if (!colab || !colab.horarioEstudio) return;
+        
+        if (!colab.horarioEstudio[diaIndex]) {
+            colab.horarioEstudio[diaIndex] = [];
         }
+        
+        colab.horarioEstudio[diaIndex].push({ inicio: '', fin: '' });
+        renderizarHorariosEstudioModal();
+    }
+
+    function eliminarHorarioEstudio(diaIndex, horarioIndex) {
+        const colab = colaboradores.find(c => c.id === colaboradorEditandoId);
+        if (!colab || !colab.horarioEstudio || !colab.horarioEstudio[diaIndex]) return;
+        
+        colab.horarioEstudio[diaIndex].splice(horarioIndex, 1);
+        renderizarHorariosEstudioModal();
+    }
+
+    function actualizarHorarioEstudio(diaIndex, horarioIndex, campo, valor) {
+        const colab = colaboradores.find(c => c.id === colaboradorEditandoId);
+        if (!colab || !colab.horarioEstudio || !colab.horarioEstudio[diaIndex]) return;
+        
+        colab.horarioEstudio[diaIndex][horarioIndex][campo] = valor;
     }
 
     function toggleSeccionEstudio() {
         const checkbox = document.getElementById('editEstudia');
         const seccion = document.getElementById('seccionEstudioModal');
         seccion.style.display = checkbox.checked ? 'block' : 'none';
-        if (!checkbox.checked) {
-            DIAS.forEach((_, index) => {
-                const cb = document.getElementById(`estudio-activo-${index}`);
-                const inicio = document.getElementById(`estudio-inicio-${index}`);
-                const fin = document.getElementById(`estudio-fin-${index}`);
-                const diaDiv = document.getElementById(`dia-estudio-${index}`);
-                cb.checked = false;
-                inicio.value = '';
-                fin.value = '';
-                inicio.disabled = true;
-                fin.disabled = true;
-                diaDiv.classList.remove('activo');
-            });
+        if (checkbox.checked) {
+            renderizarHorariosEstudioModal();
         }
     }
 
     function cargarHorarioEstudioEnModal(horarioEstudio) {
-        DIAS.forEach((_, index) => {
-            const bloque = horarioEstudio[index];
-            const checkbox = document.getElementById(`estudio-activo-${index}`);
-            const inicio = document.getElementById(`estudio-inicio-${index}`);
-            const fin = document.getElementById(`estudio-fin-${index}`);
-            const diaDiv = document.getElementById(`dia-estudio-${index}`);
-            if (checkbox && inicio && fin) {
-                checkbox.checked = bloque.activo;
-                inicio.value = bloque.inicio || '';
-                fin.value = bloque.fin || '';
-                inicio.disabled = !bloque.activo;
-                fin.disabled = !bloque.activo;
-                if (bloque.activo) {
-                    diaDiv.classList.add('activo');
-                } else {
-                    diaDiv.classList.remove('activo');
-                }
-            }
-        });
+        // Ya se maneja en renderizarHorariosEstudioModal
     }
 
     function obtenerHorarioEstudioDesdeModal() {
-        const horario = [];
-        DIAS.forEach((_, index) => {
-            const checkbox = document.getElementById(`estudio-activo-${index}`);
-            const inicio = document.getElementById(`estudio-inicio-${index}`);
-            const fin = document.getElementById(`estudio-fin-${index}`);
-            horario.push({
-                activo: checkbox.checked,
-                inicio: checkbox.checked ? (inicio.value || '') : '',
-                fin: checkbox.checked ? (fin.value || '') : ''
-            });
-        });
-        return horario;
+        const colab = colaboradores.find(c => c.id === colaboradorEditandoId);
+        return colab ? colab.horarioEstudio : Array(7).fill().map(() => []);
     }
 
     function crearColaborador(nombre, area, tipo, estudia = false) {
@@ -694,7 +895,7 @@
             id: Date.now(),
             nombre, area, tipo,
             estudia,
-            horarioEstudio: Array(7).fill().map(() => ({ activo: false, inicio: "", fin: "" })),
+            horarioEstudio: Array(7).fill().map(() => []),
             turnos: Array(7).fill().map(() => ({ tipo: 'trabajo', inicio: "", fin: "" }))
         };
     }
@@ -720,7 +921,6 @@
         document.getElementById('editTipo').value = colab.tipo;
         document.getElementById('editEstudia').checked = colab.estudia || false;
         toggleSeccionEstudio();
-        if (colab.estudia) cargarHorarioEstudioEnModal(colab.horarioEstudio);
         document.getElementById('modalEditar').classList.add('active');
     }
 
@@ -739,16 +939,17 @@
         colab.area = document.getElementById('editArea').value;
         colab.tipo = document.getElementById('editTipo').value;
         colab.estudia = document.getElementById('editEstudia').checked;
-        if (colab.estudia) {
-            colab.horarioEstudio = obtenerHorarioEstudioDesdeModal();
-        } else {
-            colab.horarioEstudio = Array(7).fill().map(() => ({ activo: false, inicio: "", fin: "" }));
+        if (!colab.estudia) {
+            colab.horarioEstudio = Array(7).fill().map(() => []);
         }
         guardarDatos();
         cerrarModal();
         renderizarColaboradores();
         if (document.getElementById('tab-horarios').classList.contains('active')) {
             renderizarHorarios();
+        }
+        if (document.getElementById('tab-vista-semanal').classList.contains('active')) {
+            renderizarVistaSemanal();
         }
     }
 
@@ -765,6 +966,27 @@
         document.querySelectorAll('.area-filter-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
         renderizarColaboradores();
+    }
+
+    // ==================== BUSCADOR ====================
+    function buscarColaborador() {
+        const texto = document.getElementById('buscadorColaborador').value.toLowerCase().trim();
+        const filas = document.querySelectorAll('#tablaColaboradores tr');
+        
+        filas.forEach((fila, index) => {
+            // Saltar el header
+            if (index === 0) return;
+            
+            const nombre = fila.querySelector('.colaborador-nombre');
+            if (nombre) {
+                const textoNombre = nombre.textContent.toLowerCase();
+                if (textoNombre.includes(texto) || texto === '') {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            }
+        });
     }
 
     function renderizarColaboradores() {
@@ -800,13 +1022,12 @@
         const colab = colaboradores.find(c => c.id === id);
         if (!colab) return;
         colab.turnos[diaIndex][campo] = valor;
-        if (colab.estudia && colab.horarioEstudio[diaIndex].activo) {
-            const estudio = colab.horarioEstudio[diaIndex];
-            const turno = colab.turnos[diaIndex];
-            if (turno.inicio && turno.fin && hayConflicto(turno.inicio, turno.fin, estudio.inicio, estudio.fin)) {
+        
+        if (colab.estudia && colab.horarioEstudio[diaIndex] && colab.horarioEstudio[diaIndex].length > 0) {
+            if (hayConflictoConEstudio(colab.turnos[diaIndex].inicio, colab.turnos[diaIndex].fin, diaIndex)) {
                 if (elemento) elemento.classList.add('input-conflicto');
                 setTimeout(() => {
-                    alert(`⚠️ CONFLICTO 🎓\n\nEl turno ${turno.inicio}-${turno.fin} se superpone con el horario de estudio (${estudio.inicio}-${estudio.fin})`);
+                    alert(`⚠️ CONFLICTO 🎓\n\nEl turno ${colab.turnos[diaIndex].inicio}-${colab.turnos[diaIndex].fin} se superpone con el horario de estudio`);
                     if (elemento) elemento.classList.remove('input-conflicto');
                 }, 100);
             } else {
@@ -880,7 +1101,6 @@
             try {
                 const datos = JSON.parse(e.target.result);
                 
-                // Validar estructura del archivo
                 if (!datos.colaboradores || !Array.isArray(datos.colaboradores)) {
                     alert("❌ El archivo no tiene el formato correcto\n\nDebe contener un array 'colaboradores'");
                     return;
@@ -905,6 +1125,9 @@
                     if (document.getElementById('tab-horarios').classList.contains('active')) {
                         renderizarHorarios();
                     }
+                    if (document.getElementById('tab-vista-semanal').classList.contains('active')) {
+                        renderizarVistaSemanal();
+                    }
                     
                     alert("✅ Datos importados correctamente");
                 }
@@ -913,7 +1136,7 @@
             }
         };
         reader.readAsText(file);
-        event.target.value = ''; // Reset input
+        event.target.value = '';
     }
 
     function exportarAImagen() {
@@ -950,6 +1173,59 @@
         });
     }
 
+    // ==================== VISTA SEMANAL COMPLETA ====================
+    
+    function renderizarVistaSemanal() {
+        const tbody = document.getElementById('bodyVistaSemanal');
+        tbody.innerHTML = '';
+        
+        let areaActual = null;
+        
+        colaboradores.forEach(colab => {
+            if (colab.area !== areaActual) {
+                areaActual = colab.area;
+                const filaSeparador = document.createElement('tr');
+                filaSeparador.className = 'separador-area';
+                filaSeparador.innerHTML = `
+                    <td colspan="9" style="padding: 10px;">
+                        ${areaActual === 'LIDER' ? '👔' : areaActual === 'SERVICIO' ? '🎯' : '🏭'} ${areaActual}
+                    </td>
+                `;
+                tbody.appendChild(filaSeparador);
+            }
+            
+            const fila = document.createElement('tr');
+            
+            let celdasDias = '';
+            DIAS.forEach((dia, index) => {
+                const turno = colab.turnos[index];
+                let contenido = '';
+                
+                if (turno.tipo === 'descanso') {
+                    contenido = '<span class="turno-badge turno-descanso">🏖️ Descanso</span>';
+                } else if (turno.tipo === 'vacaciones') {
+                    contenido = '<span class="turno-badge turno-vacaciones">✈️ Vacaciones</span>';
+                } else if (turno.tipo === 'feriado') {
+                    contenido = '<span class="turno-badge turno-feriado">🎉 Feriado</span>';
+                } else if (turno.inicio && turno.fin) {
+                    contenido = `<span class="turno-badge turno-trabajo">${turno.inicio} - ${turno.fin}</span>`;
+                } else {
+                    contenido = '<span class="sin-turno">Sin turno</span>';
+                }
+                
+                celdasDias += `<td class="turno-cell">${contenido}</td>`;
+            });
+            
+            fila.innerHTML = `
+                <td class="col-nombre">${colab.nombre}${colab.estudia ? ' <span title="Estudia">🎓</span>' : ''}</td>
+                <td class="col-area"><span class="area-badge ${colab.area.toLowerCase()}">${colab.area}</span></td>
+                ${celdasDias}
+            `;
+            
+            tbody.appendChild(fila);
+        });
+    }
+
     // ==================== PLANTILLAS ====================
     
     function mostrarPlantillasDia(colabId, diaIndex, event) {
@@ -983,7 +1259,7 @@
         dropdown.innerHTML = '';
         
         plantillasDiarias.forEach(plantilla => {
-            const horarioDisplay = plantilla.tipo === 'descanso' || plantilla.tipo === 'vacaciones' 
+            const horarioDisplay = plantilla.tipo === 'descanso' || plantilla.tipo === 'vacaciones' || plantilla.tipo === 'feriado'
                 ? 'Día libre' 
                 : `${plantilla.inicio} - ${plantilla.fin}`;
             
@@ -1005,7 +1281,7 @@
         plantillasDiarias.forEach(plantilla => {
             const card = document.createElement('div');
             card.className = 'plantilla-card';
-            const horarioDisplay = plantilla.tipo === 'descanso' || plantilla.tipo === 'vacaciones' 
+            const horarioDisplay = plantilla.tipo === 'descanso' || plantilla.tipo === 'vacaciones' || plantilla.tipo === 'feriado'
                 ? 'Día libre' 
                 : `${plantilla.inicio} - ${plantilla.fin}`;
             const horasCalculadas = plantilla.tipo === 'trabajo' && plantilla.inicio && plantilla.fin
@@ -1128,26 +1404,35 @@
                 }
                 const disabled = turno.tipo !== 'trabajo';
                 const selectorClass = `dia-selector ${turno.tipo}`;
-                const tieneEstudio = colab.estudia && colab.horarioEstudio[index].activo;
+                const tieneEstudio = colab.estudia && colab.horarioEstudio && colab.horarioEstudio[index] && colab.horarioEstudio[index].length > 0;
+                
+                // Generar texto con los horarios de estudio
+                let textoHorarioEstudio = '';
+                if (tieneEstudio) {
+                    const horarios = colab.horarioEstudio[index];
+                    const horariosTexto = horarios.map(h => `${h.inicio || '--:--'} - ${h.fin || '--:--'}`).join(', ');
+                    textoHorarioEstudio = `📚 Estudio: ${horariosTexto}`;
+                }
                 
                 turnosHTML += `
                     <td class="${tieneEstudio ? 'con-estudio' : ''}" style="position: relative;">
-                        ${tieneEstudio ? `<span class="badge-estudio" title="Estudio: ${colab.horarioEstudio[index].inicio}-${colab.horarioEstudio[index].fin}">🎓</span>` : ''}
+                        ${tieneEstudio ? `<span class="badge-estudio" title="${textoHorarioEstudio}">🎓</span>` : ''}
                         <button class="btn-plantilla-rapida" onclick="mostrarPlantillasDia(${colab.id}, ${index}, event)">⚡ Plantilla</button>
                         <select class="${selectorClass}" onchange="cambiarTipoDia(${colab.id}, ${index}, this.value)">
                             <option value="trabajo" ${turno.tipo === 'trabajo' ? 'selected' : ''}>🕐 Trabajo</option>
                             <option value="descanso" ${turno.tipo === 'descanso' ? 'selected' : ''}>🏖️ Descanso</option>
                             <option value="vacaciones" ${turno.tipo === 'vacaciones' ? 'selected' : ''}>✈️ Vacaciones</option>
+                            <option value="feriado" ${turno.tipo === 'feriado' ? 'selected' : ''}>🎉 Feriado</option>
                         </select>
                         <div class="time-inputs">
                             <div class="time-row">
                                 <label>Desde:</label>
-                                <input type="text" class="hora-input ${tieneEstudio && turno.inicio && turno.fin && colab.horarioEstudio[index].activo && hayConflicto(turno.inicio, turno.fin, colab.horarioEstudio[index].inicio, colab.horarioEstudio[index].fin) ? 'input-conflicto' : ''}" 
+                                <input type="text" class="hora-input ${tieneEstudio && hayConflictoConEstudio(turno.inicio, turno.fin, index) ? 'input-conflicto' : ''}" 
                                     value="${turno.inicio}" ${disabled ? 'disabled' : ''} onchange="actualizarTurno(${colab.id}, ${index}, 'inicio', this.value, this)">
                             </div>
                             <div class="time-row">
                                 <label>Hasta:</label>
-                                <input type="text" class="hora-input ${tieneEstudio && turno.inicio && turno.fin && colab.horarioEstudio[index].activo && hayConflicto(turno.inicio, turno.fin, colab.horarioEstudio[index].inicio, colab.horarioEstudio[index].fin) ? 'input-conflicto' : ''}" 
+                                <input type="text" class="hora-input ${tieneEstudio && hayConflictoConEstudio(turno.inicio, turno.fin, index) ? 'input-conflicto' : ''}" 
                                     value="${turno.fin}" ${disabled ? 'disabled' : ''} onchange="actualizarTurno(${colab.id}, ${index}, 'fin', this.value, this)">
                             </div>
                         </div>
@@ -1184,7 +1469,7 @@
                 ${turnosHTML}
                 <td class="total-cell ${claseEstado}">
                     <div style="font-size: 1.05em;">${totalHorasNetas.toFixed(1)}h</div>
-                    <div style="font-size: 0.7em; color: #6b7280;">de ${meta}h</div>
+                    <div style="font-size: 0.85em; color: #6b7280;">de ${meta}h</div>
                     ${breakInfoHTML}${estadoHTML}
                 </td>
             `;
